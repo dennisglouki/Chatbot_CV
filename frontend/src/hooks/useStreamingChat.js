@@ -14,30 +14,39 @@ export const useStreamingChat = () => {
     shouldStopRef.current = true;
   }, []);
 
-
   const sendMessage = async (chatRequest) => {
-  setIsLoading(true)
-  setError(null)
-  
-  try {
-    addMessage({
-      role: 'user',
-      content: chatRequest.message
-    })
+    setIsLoading(true)
+    setError(null)
 
-    const response = await ChatService.sendMessage(chatRequest.message)
+    try {
+      // Keep the previous conversation before adding the new question
+      const history = messages.map(({ role, content }) => ({
+  role,
+  content
+}))
 
-    addMessage({
-      role: 'assistant',
-      content: response.answer
-    })
+      addMessage({
+        role: 'user',
+        content: chatRequest.message
+      })
 
-  } catch (err) {
-    setError(err.message)
-  } finally {
-    setIsLoading(false)
+      const response = await ChatService.sendMessage(
+        chatRequest.message,
+        history
+      )
+
+      addMessage({
+        role: 'assistant',
+        content: response.answer,
+        sources: response.sources
+      })
+
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
   // const sendMessage = async (chatRequest) => {
   //   setIsLoading(true)
   //   setError(null)

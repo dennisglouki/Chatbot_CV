@@ -81,5 +81,26 @@ const AssistantMessage = ({ message }) => (
       {message.content}
     </ReactMarkdown>
     {message.isTyping && <TypingIndicator inline />}
+       {message.sources?.length > 0 && (
+      <MessageSources sources={message.sources} />
+    )}
+  </div>
+);
+const MessageSources = ({ sources }) => (
+  <div className="mt-3 pt-3 border-t border-gray-700/50">
+    <p className="text-xs text-gray-400 mb-2">
+      Sources
+    </p>
+
+    <div className="flex flex-col gap-1">
+      {sources.map((source, index) => (
+        <div
+          key={`${source.source}-${source.page}-${index}`}
+          className="text-xs text-gray-400"
+        >
+          📄 {source.source} · p. {source.page}
+        </div>
+      ))}
+    </div>
   </div>
 ); 

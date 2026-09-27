@@ -2,7 +2,7 @@ const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 export class ChatService {
-  static async sendMessage(message) {
+  static async sendMessage(message, history) {
     const response = await fetch(`${BACKEND_URL}/chat`, {
       method: 'POST',
       headers: {
@@ -10,6 +10,7 @@ export class ChatService {
       },
       body: JSON.stringify({
         message,
+        history,
       }),
     });
 

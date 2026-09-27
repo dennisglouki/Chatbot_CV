@@ -18,6 +18,7 @@ class Bot:
 
         with open(data_folder / "chunks.json") as f:
             self.chunks = json.load(f)
+        
 
     def prepare_query(self, query):
         return f"task: search result | query: {query}"
@@ -49,7 +50,7 @@ class Bot:
             for i in indices[0]
         ]
 
-    def create_prompt(self, question,context):
+    def create_prompt(self, question,context, history):
         cont = ''
         for num, i in enumerate(context):
             cont += f'''Context {num+1}
@@ -58,18 +59,27 @@ class Bot:
             Text of context: {i['text']}\n'''
 
 
+        conversation = ''
+
+        for message in history:
+            conversation += f"{message['role']}: {message['content']}\n"
+
         return f"""
     CONTEXT:
     {cont}
 
-    USER QUESTION:
+    PREVIOUS CONVERSATION:
+    {conversation}
+
+    CURRENT USER QUESTION:
     {question}
     """
 
 
-    def execute_bot(self, question):
+    def execute_bot(self, question, history):
         context = self.search(question)
-        prompt = self.create_prompt(question, context)
+        prompt = self.create_prompt(question, context, history)
+        print(context)
 
         response = self.client.models.generate_content(
             model="gemini-3.8-flash",
@@ -78,7 +88,19 @@ class Bot:
                 "system_instruction": SYSTEM_PROMPT,
             },
         )
+        
+        sources = [
+        {
+            "source": item["source"],
+            "page": item["page_nr"]
+        }
+        for item in context
+    ]
 
-        return response.text
+        return {
+            "answer": response.text,
+            "sources": sources
+        }
+
 
 
