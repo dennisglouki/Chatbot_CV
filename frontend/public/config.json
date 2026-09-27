@@ -17,6 +17,6 @@
   },
   "chat": {
     "inputPlaceholder": "Ask me anything about Dennis...",
-    "initialMessage": "Hey there! 👋 I'm Dennis's AI assistant, I have access to his CV, and research articles. Feel free to ask me anything! (The bot is hosted for free on Render...therefore it might take 1 minute until BE and FE is running.)"
+    "initialMessage": "Hey there! 👋 I'm Dennis's AI assistant, I have access to his CV, and research articles. Feel free to ask me anything! This chatbot is free. Thus, the first answer might take up to 1 minute. The second answer will be much faster."
   }
 } 
