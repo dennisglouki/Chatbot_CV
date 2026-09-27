@@ -1,0 +1,22 @@
+{
+  "personal": {
+    "name": "Dennis Gloukhman",
+    "email": "dennisgloukhman@hotmail.de",
+    "profileImageAlt": "Dennis Gloukhman"
+  },
+  "social": {
+    "github": {
+      "url": "https://github.com/dennisglouki"
+    },
+    "linkedin": {
+      "url": "https://www.linkedin.com/in/dennis-g-10019815b "
+    },
+    "email": {
+      "url": "mailto:dennisgloukhman@hotmail.de"
+    }
+  },
+  "chat": {
+    "inputPlaceholder": "Ask me anything about Dennis...",
+    "initialMessage": "Hey there! 👋 I'm Dennis's AI assistant, I have access to his CV, and research articles. Feel free to ask me anything!"
+  }
+} 
