@@ -9,15 +9,29 @@ export class ChatService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: message,
+        message,
       }),
     });
 
+    const text = await response.text();
+
     if (!response.ok) {
-      throw new Error('Failed to send message');
+      throw new Error(
+        `Backend error (${response.status}): ${text || 'empty response'}`
+      );
     }
 
-    return response.json();
+    if (!text) {
+      throw new Error('Backend returned an empty response');
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error(
+        `Backend returned invalid JSON: ${text.slice(0, 200)}`
+      );
+    }
   }
 }
 
