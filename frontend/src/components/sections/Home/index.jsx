@@ -25,12 +25,12 @@ export const HomeSection = () => {
           <img 
             src="/profile.jpg" 
             alt={personalInfo.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-[50%_17%] scale-[1.8]"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent" />
         </div>
         <motion.div 
-          className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-purple-500 rounded-full flex items-center justify-center"
+          className="absolute -bottom-0 -right-2 w-9 h-9 md:w-9 m9:h-9 bg-purple-500 rounded-full flex items-center justify-center"
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         >
