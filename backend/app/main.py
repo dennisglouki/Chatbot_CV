@@ -60,7 +60,7 @@ def chat(request_ip: Request, request: ChatRequest):
         if messages_counter[client_ip] == 0:
             answer = "Good question!😄 " + answer
         if messages_counter[client_ip] == 2:
-            answer = "Wow, you're really curious! 😄 Let's grab a coffee instead of chatting here ☕. Reach out to me at dennisgloukhman@hotmail.de\n\n Back to you question:" + answer
+            answer = "Wow, you're really curious! 😄 Let's grab a coffee instead of chatting here ☕. Reach out to me at dennisgloukhman@hotmail.de\n\n Back to your question:   " + answer
 
            
     messages_counter[client_ip] += 1
