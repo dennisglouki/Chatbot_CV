@@ -45,6 +45,11 @@ def status():
         "status": "ok"
     }
 
+@app.get("/health")
+def status():
+    return {
+        "status": "ok"
+    }
 
 
 @app.post("/chat")
