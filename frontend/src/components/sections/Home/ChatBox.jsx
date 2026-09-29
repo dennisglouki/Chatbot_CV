@@ -10,14 +10,41 @@ import { getPersonalInfo } from '../../../config/configLoader';
 export const ChatBox = () => {
   const [input, setInput] = useState('');
   const [userEngaged, setUserEngaged] = useState(false);
-  const { messages, isLoading, error, sendMessage, stopAnswering } = useStreamingChat();
+  const [backendOnline, setBackendOnline] = useState(false);
+  const {
+  messages,
+  isLoading,
+  error,
+  sendMessage,
+  stopAnswering,
+  messageCount,
+  messageLimit
+} = useStreamingChat();
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const lastMessageCountRef = useRef(messages.length);
   
   const personalInfo = getPersonalInfo();
   const firstName = personalInfo?.name.split(' ')[0] || 'AI';
+  const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+  
+    useEffect(() => {
+    const checkBackend = async () => {    try {
+      const response = await fetch(`${BACKEND_URL}/health`);
 
+      setBackendOnline(response.ok);
+    } catch {
+      setBackendOnline(false);
+    }
+  };
+
+    checkBackend();
+
+    const interval = setInterval(checkBackend, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -115,15 +142,26 @@ export const ChatBox = () => {
               </motion.div>
             </div>
           </div>
-
+<div className="relative flex items-center gap-2 sm:gap-3 ml-auto flex-shrink-0">            {/* Question counter */}
+             <span className="text-[10px] sm:text-xs text-gray-400 whitespace-nowrap">
+        Questions: {Math.min(messageCount, messageLimit)}  / {messageLimit}
+      </span>
+      </div>
+     
           {/* Status indicator */}
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 ml-2 sm:ml-4 flex-shrink-0"
+            className={`relative flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-full ml-2 sm:ml-4 flex-shrink-0 ${
+              backendOnline
+                ? 'bg-green-500/10 border border-green-500/20'
+                : 'bg-red-500/10 border border-red-500/20'
+            }`}
           >
             <motion.div
-              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"
+              className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
+                backendOnline ? 'bg-green-500' : 'bg-red-500'
+              }`}
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [1, 0.7, 1],
@@ -131,10 +169,17 @@ export const ChatBox = () => {
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
             />
-            <span className="text-[10px] sm:text-xs text-gray-400 whitespace-nowrap">Online</span>
+
+            <span
+              className={`text-[10px] sm:text-xs whitespace-nowrap ${
+                backendOnline ? 'text-green-400' : 'text-red-400'
+              }`}
+            >
+              {backendOnline ? 'Online' : 'Offline'}
+            </span>
           </motion.div>
         </motion.div>
 

@@ -49,16 +49,17 @@ def health_check():
 
 @app.post("/chat")
 def chat(request_ip: Request, request: ChatRequest):
+    message_limit = 8
     client_ip = request_ip.client.host
 
-    if messages_counter[client_ip] >= 8:
-        return {"answer": "Unfortunately, you've reached the 8-question limit. To keep the chatbot free, no further questions are available. Thanks for chatting! 😊"}
+    if messages_counter[client_ip] >= message_limit:
+        return {"answer": "Unfortunately, you've reached the 8-question limit. To keep the chatbot free, no further questions are available. Thanks for chatting! 😊", "message_count": messages_counter[client_ip], 'message_limit': message_limit}
     else:
         results = chatbot.execute_bot(request.message, request.history)
         answer = results["answer"]
         sources = results["sources"] 
-        if messages_counter[client_ip] == 0:
-            answer = "Good question!😄 " + answer
+        # if messages_counter[client_ip] == 0:
+        #     answer = "Good question!😄 " + answer
         if messages_counter[client_ip] == 2:
             answer = "Wow, you're really curious! 😄 Let's grab a coffee instead of chatting here ☕. Reach out to me at dennisgloukhman@hotmail.de\n\n Back to your question:   " + answer
 
@@ -66,6 +67,6 @@ def chat(request_ip: Request, request: ChatRequest):
     messages_counter[client_ip] += 1
 
 
-    return {"answer": answer, "sources": sources}
+    return {"answer": answer, "sources": sources, "message_count": messages_counter[client_ip], 'message_limit': message_limit  }
 
 

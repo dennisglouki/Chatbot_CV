@@ -4,7 +4,11 @@ from google import genai
 import pathlib
 from app.prompt import SYSTEM_PROMPT
 import numpy as np
+from pydantic import BaseModel
 
+class ChatResponse(BaseModel):
+    answer: str
+    relevant_contexts: list[int]
 
 class Bot:
     def __init__(self):
@@ -37,7 +41,7 @@ class Bot:
             dtype=np.float32,
         )
 
-    def search(self,query, k=3):
+    def search(self,query, k=7, threshold= .535):
         query_embedding = self.embed_query(query)
 
         scores, indices = self.index.search(
@@ -47,7 +51,7 @@ class Bot:
 
         return [
             self.chunks[i]
-            for i in indices[0]
+            for i in indices[scores>threshold]
         ]
 
     def create_prompt(self, question,context, history):
@@ -86,6 +90,8 @@ class Bot:
             contents=prompt,
             config={
                 "system_instruction": SYSTEM_PROMPT,
+                "response_mime_type": "application/json",
+                "response_schema": ChatResponse,
             },
         )
         
@@ -94,11 +100,12 @@ class Bot:
             "source": item["source"],
             "page": item["page_nr"]
         }
-        for item in context
+        for i, item in enumerate(context)
+        if i + 1 in response.parsed.relevant_contexts
     ]
 
         return {
-            "answer": response.text,
+            "answer": response.parsed.answer,
             "sources": sources
         }
 
