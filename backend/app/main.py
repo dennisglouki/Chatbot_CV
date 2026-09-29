@@ -39,8 +39,8 @@ def home():
     }
 
 
-@app.get("/health")
-def health_check():
+@app.get("/check/status")
+def status():
     return {
         "status": "ok"
     }

@@ -37,10 +37,6 @@ vi.mock('uuid', () => ({
   v4: () => 'test-uuid-1234'
 }));
 
-// Mock for Vercel Analytics
-vi.mock('@vercel/analytics', () => ({
-  inject: vi.fn()
-}));
 
 // Mock for Element.scrollIntoView
 if (typeof Element !== 'undefined') {

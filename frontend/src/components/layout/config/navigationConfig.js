@@ -48,12 +48,12 @@ export const sections = {
     path: '/about-me',
     color: 'from-blue-500 to-cyan-500'
   },
-  // projects: {
-  //   icon: Code,
-  //   title: 'Projects',
-  //   path: '/projects',
-  //   color: 'from-emerald-500 to-green-500'
-  // },
+  projects: {
+    icon: Code,
+    title: 'Projects',
+    path: '/projects',
+    color: 'from-emerald-500 to-green-500'
+  },
   // blog: {
   //   icon: Blog,
   //   title: 'Blog',

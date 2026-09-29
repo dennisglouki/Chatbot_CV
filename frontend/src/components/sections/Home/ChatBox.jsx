@@ -29,9 +29,14 @@ export const ChatBox = () => {
   const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
   
-    useEffect(() => {
-    const checkBackend = async () => {    try {
-      const response = await fetch(`${BACKEND_URL}/health`);
+
+useEffect(() => {
+  const checkBackend = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/check/status`, {
+        method: 'GET',
+        cache: 'no-store',
+      });
 
       setBackendOnline(response.ok);
     } catch {
@@ -39,12 +44,14 @@ export const ChatBox = () => {
     }
   };
 
-    checkBackend();
+  // Ping immediately when homepage opens
+  checkBackend();
 
-    const interval = setInterval(checkBackend, 30000);
+  // Check again every 30 seconds
+  const interval = setInterval(checkBackend, 30000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => clearInterval(interval);
+}, []);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
