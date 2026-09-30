@@ -17,7 +17,7 @@ class Bot:
         data_folder = pathlib.Path(__file__).resolve().parent.parent / "data"
 
         self.index = faiss.read_index(
-            str(data_folder / "cv.index")
+            str(data_folder / "files.index")
         )
 
         with open(data_folder / "chunks.json") as f:
@@ -51,7 +51,8 @@ class Bot:
 
         return [
             self.chunks[i]
-            for i in indices[scores>threshold]
+            #for i in indices[scores>threshold]
+            for i in indices[0]
         ]
 
     def create_prompt(self, question,context, history):
@@ -80,8 +81,8 @@ class Bot:
     """
 
 
-    def execute_bot(self, question, history):
-        context = self.search(question)
+    def execute_bot(self, question, history,k =7):
+        context = self.search(question, k=k)
         prompt = self.create_prompt(question, context, history)
         print(context)
 
@@ -98,7 +99,9 @@ class Bot:
         sources = [
         {
             "source": item["source"],
-            "page": item["page_nr"]
+            "page": item["page_nr"],
+            "url": item["url"],
+            #"text": item['text'],
         }
         for i, item in enumerate(context)
         if i + 1 in response.parsed.relevant_contexts

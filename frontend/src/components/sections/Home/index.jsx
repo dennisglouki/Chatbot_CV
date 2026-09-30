@@ -46,8 +46,20 @@ export const HomeSection = () => {
       >
         {personalInfo.name}
       </motion.h1>
+
+
       
       {/* <IntroSection /> */}
+            <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+className="w-full max-w-4xl mx-auto px-6 mb-6 text-left text-sm md:text-base text-gray-400 leading-relaxed"      >
+        I'm a Business & Data Analyst combining expertise in Analytics,
+        Psychology, and Finance with a passion for data, technology, and AI.
+        I enjoy building data-driven solutions that connect technical
+        possibilities with real-world business needs.
+      </motion.p>
 
       <ChatBox />
 

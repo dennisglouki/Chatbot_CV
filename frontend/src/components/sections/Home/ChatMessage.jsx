@@ -95,11 +95,12 @@ const MessageSources = ({ sources }) => {
   const uniqueSources = Array.from(
     new Map(
       sources.map((source) => [
-        `${source.source}-${source.page}`,
+        `${source.source}-${source.page_nr}`,
         source
       ])
     ).values()
   );
+
 
   return (
     <div className="mt-3 pt-3 border-t border-gray-700/50">
@@ -108,14 +109,20 @@ const MessageSources = ({ sources }) => {
       </p>
 
       <div className="flex flex-col gap-1">
-        {uniqueSources.map((source) => (
-          <div
-            key={`${source.source}-${source.page}`}
-            className="text-xs text-gray-400"
-          >
-            📄 {source.source} · p. {source.page}
-          </div>
-        ))}
+        {uniqueSources.map((source) => {
+
+          return (
+            <a
+              key={`${source.source}-${source.page}`}
+              href={source.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:underline"
+            >
+              📄 {source.source} · p. {source.page}
+            </a>
+          );
+        })}
       </div>
     </div>
   );
